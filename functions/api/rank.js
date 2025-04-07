@@ -1,6 +1,6 @@
+// Cloudflare Pages Function for handling rank API
 export async function onRequest(context) {
   const { request, env } = context;
-  const url = new URL(request.url);
   
   // 获取排行榜列表
   if (request.method === 'GET') {
@@ -8,7 +8,7 @@ export async function onRequest(context) {
       'SELECT * FROM players ORDER BY score DESC LIMIT 15'
     ).all();
     
-    return new Response(JSON.stringify(results), {
+    return new Response(JSON.stringify(results || []), {
       headers: { 
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
@@ -20,29 +20,39 @@ export async function onRequest(context) {
   if (request.method === 'POST') {
     const data = await request.json();
     
-    // 插入或更新玩家数据
-    await env.DB.prepare(`
-      INSERT INTO players (name, score, lives, wave)
-      VALUES (?, ?, ?, ?)
-      ON CONFLICT(name) DO UPDATE SET
-        score = MAX(excluded.score, players.score),
-        lives = excluded.lives,
-        wave = excluded.wave
-    `).bind(data.name, data.score, data.lives, data.wave).run();
-    
-    // 获取玩家排名
-    const { results } = await env.DB.prepare(`
-      SELECT COUNT(*) + 1 as rank 
-      FROM players 
-      WHERE score > ?
-    `).bind(data.score).all();
-    
-    return new Response(JSON.stringify({ rank: results[0].rank }), {
-      headers: { 
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
+    try {
+      // 插入或更新玩家数据
+      await env.DB.prepare(`
+        INSERT INTO players (name, score, lives, wave)
+        VALUES (?, ?, ?, ?)
+        ON CONFLICT(name) DO UPDATE SET
+          score = MAX(excluded.score, players.score),
+          lives = excluded.lives,
+          wave = excluded.wave
+      `).bind(data.name, data.score, data.lives, data.wave).run();
+      
+      // 获取玩家排名
+      const { results } = await env.DB.prepare(`
+        SELECT COUNT(*) + 1 as rank 
+        FROM players 
+        WHERE score > ?
+      `).bind(data.score).all();
+      
+      return new Response(JSON.stringify({ rank: results[0].rank }), {
+        headers: { 
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        }
+      });
+    } catch (e) {
+      return new Response(JSON.stringify({ error: e.message }), { 
+        status: 500,
+        headers: { 
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        }
+      });
+    }
   }
   
   // OPTIONS 请求处理 CORS 预检
