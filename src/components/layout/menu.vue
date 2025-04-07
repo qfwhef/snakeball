@@ -58,16 +58,36 @@
         @2025.4.1
         <br />MAKE BY JIEJOE
     </a>
+    <div class="menu" :class="{'menu_hide':menu_if_hide.value,'menu_showing':menu_if_showing.value}">
+        <a href="https://jiejoe.com" target="_blank" class="menu_copyright">
+            <img src="@/assets/logo.png" />
+            <br />MAKE BY JIEJOE
+        </a>
+        <div class="menu_box">
+            <div class="menu_box_sound" :class="{'menu_box_sound_mute':!store.audio_controller.if_global_active}" @click="store.toggle_audio"></div>
+            <div class="menu_box_colormode" :class="{'menu_box_colormode_dark':current_colormode.value=='dark'}" @click="change_colormode"></div>
+            <div class="menu_box_db" @click="openDbTest"></div>
+        </div>
+    </div>
 </template>
 
 <script setup>
 import { global } from "@/stores/global";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import gsap from "gsap";
 import { Howler } from "howler";
+import { getCurrentInstance } from 'vue';
+
 const store = global();
+const instance = getCurrentInstance();
+
 //当前的颜色模式：默认为light
 const current_colormode = ref("light");
+//处理menu显隐的参数
+const menu_if_hide = ref(true);
+const menu_if_showing = ref(false);
+// menu动画控制
+let menu_timeline = null; //动画时间轴
 // 切换页面颜色模式
 function switch_colormode() {
     document.querySelector("html").classList.toggle("_darkmode");
@@ -83,19 +103,91 @@ function switch_mutemode() {
 // DOM元素
 const links = ref(null);
 const copyright = ref(null);
-// 显示菜单
-function show_menu() {
-    links.value.classList.remove("_hidden");
-    copyright.value.classList.remove("_hidden");
-}
-// 隐藏菜单
-function hidden_menu() {
-    links.value.classList.add("_hidden");
-    copyright.value.classList.add("_hidden");
-}
+// 菜单显示：设置菜单的各种样式
+const show_menu = () => {
+    //如果菜单正在显示，则不再次执行
+    if (menu_if_showing.value || !menu_if_hide.value) return;
+    // 设置为显示
+    menu_if_hide.value = false;
+    menu_if_showing.value = true;
+    // menu动画
+    menu_timeline = gsap
+        .timeline()
+        .to(".menu_box", {
+            opacity: 1,
+            duration: 0.8,
+            ease: "power3.out",
+        })
+        .to(
+            ".menu_copyright",
+            {
+                opacity: 0.7,
+                y: 0,
+                duration: 0.8,
+                ease: "power3.out",
+            },
+            "<"
+        );
+};
+// 菜单隐藏：设置菜单的各种样式
+const hidden_menu = () => {
+    //如果菜单已经隐藏，则不再次执行
+    if (!menu_if_showing.value || menu_if_hide.value) return;
+    menu_if_showing.value = false;
+    // menu动画
+    menu_timeline = gsap
+        .timeline()
+        .to(".menu_box", {
+            opacity: 0,
+            duration: 0.8,
+            ease: "power3.out",
+        })
+        .to(
+            ".menu_copyright",
+            {
+                opacity: 0,
+                y: "100%",
+                duration: 0.8,
+                ease: "power3.out",
+                onComplete: () => {
+                    menu_if_hide.value = true; //隐藏菜单
+                },
+            },
+            "<"
+        );
+};
+// 变更颜色模式
+const change_colormode = () => {
+    if (current_colormode.value == "light") {
+        current_colormode.value = "dark";
+        document.documentElement.classList.add("_darkmode");
+    } else {
+        current_colormode.value = "light";
+        document.documentElement.classList.remove("_darkmode");
+    }
+};
+//全局保存mode控制状态
+store.toggle_color = change_colormode;
+store.if_dark_mode = computed(() => current_colormode.value == "dark");
+// 全局控制音频
+//实现全局音频静音
+store.toggle_audio = () => {
+    store.audio_controller.if_global_active = !store.audio_controller.if_global_active;
+    Howler.mute(!store.audio_controller.if_global_active);
+};
 // 储存全局功能函数
 store.show_menu = show_menu;
 store.hidden_menu = hidden_menu;
+
+// 打开数据库测试页面
+function openDbTest() {
+    // 获取根组件中的 dbTest 引用
+    const rootApp = instance.appContext.app._instance;
+    const dbTest = rootApp.refs.dbTest;
+    if (dbTest) {
+        dbTest.showDbTest();
+    }
+}
 </script>
 
 <style scoped>
@@ -254,6 +346,86 @@ store.hidden_menu = hidden_menu;
 @media (hover: hover) {
     .copyright:hover {
         color: var(--color_gray);
+    }
+}
+.menu {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100dvh;
+    background-color: #0000;
+    z-index: 999;
+    pointer-events: none;
+}
+.menu_hide {
+    display: none;
+}
+.menu_box {
+    position: absolute;
+    display: flex;
+    top: var(--margin_y);
+    right: var(--margin_x);
+    opacity: 0;
+    pointer-events: all;
+}
+.menu_box > div {
+    width: calc(var(--scale) * 5rem);
+    height: calc(var(--scale) * 5rem);
+    margin-left: calc(var(--scale) * 2rem);
+    cursor: pointer;
+    background-position: center;
+    background-size: 60%;
+    background-repeat: no-repeat;
+    filter: invert();
+    transition: transform 0.5s var(--ease_out);
+}
+@media (hover: hover) {
+    .menu_box > div:hover {
+        transform: scale(1.2);
+    }
+}
+.menu_box_sound {
+    background-image: url("../../assets/icons/sound.svg");
+}
+.menu_box_sound_mute {
+    background-image: url("../../assets/icons/mute.svg");
+}
+.menu_box_colormode {
+    background-image: url("../../assets/icons/colormode.svg");
+}
+.menu_box_colormode_dark {
+    background-image: url("../../assets/icons/colormode_dark.svg");
+}
+.menu_box_db {
+    background-image: url("../../assets/icons/database.svg");
+}
+.menu_copyright {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--color_front);
+    font-size: calc(var(--scale) * 1.3rem);
+    line-height: calc(var(--scale) * 2.2rem);
+    text-decoration: none;
+    pointer-events: all;
+    align-self: center;
+    margin-bottom: var(--margin_y);
+    opacity: 0;
+    transform: translateY(100%);
+    transition: color 0.5s var(--ease_out);
+}
+.menu_copyright img {
+    width: calc(var(--scale) * 5rem);
+    transition: transform 0.5s var(--ease_out);
+}
+@media (hover: hover) {
+    .menu_copyright:hover {
+        color: var(--color_gray);
+    }
+    .menu_copyright:hover img {
+        transform: scale(1.2);
     }
 }
 </style>

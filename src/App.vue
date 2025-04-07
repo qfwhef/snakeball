@@ -7,6 +7,8 @@
     <Rank />
     <Menu />
     <Loading />
+    <Game />
+    <DbTest ref="dbTest" />
 </template>
 <script setup>
 // sections
@@ -14,12 +16,37 @@ import Welcome from "@/components/sections/welcome.vue";
 import Start from "@/components/sections/start.vue";
 import Instrution from "@/components/sections/instrution.vue";
 import Rank from "@/components/sections/rank.vue";
+import Game from "@/components/game/game.vue";
+import DbTest from "@/components/sections/dbtest.vue";
 // layout
 import Background from "@/components/layout/background.vue";
 import Menu from "@/components/layout/menu.vue";
 import Loading from "@/components/layout/loading.vue";
 // game
 import Stage from "@/components/game/stage.vue";
+import { global } from '@/stores/global';
+import { onMounted, ref, computed } from 'vue';
+
+const store = global();
+const dbTest = ref(null);
+const game_active = computed(() => store.game.if_visible.value);
+const welcome_active = computed(() => store.welcome.if_visible.value);
+
+// 初始化
+onMounted(() => {
+  // 监听键盘事件 - 按 Ctrl+D 打开数据库测试页面
+  window.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'd') {
+      e.preventDefault();
+      dbTest.value.showDbTest();
+    }
+  });
+
+  // 显示欢迎界面
+  setTimeout(() => {
+    store.show_welcome();
+  }, 800);
+});
 </script>
 <style>
 /* 全局设置 */
