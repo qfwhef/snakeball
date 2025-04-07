@@ -1,4 +1,6 @@
 const { defineConfig } = require('@vue/cli-service')
+const webpack = require('webpack')
+
 module.exports = defineConfig({
   transpileDependencies: true,
   publicPath: './',
@@ -9,7 +11,7 @@ module.exports = defineConfig({
       },
     },
     plugins: [
-      require('webpack').ProvidePlugin({
+      new webpack.ProvidePlugin({
         process: 'process/browser',
       }),
     ],
