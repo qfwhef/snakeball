@@ -73,7 +73,7 @@
 
 <script setup>
 import { global } from "@/stores/global";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import gsap from "gsap";
 import { Howler } from "howler";
 import { getCurrentInstance } from 'vue';
