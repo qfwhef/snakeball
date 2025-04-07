@@ -210,7 +210,7 @@ const rank = {
         // 更新默认显示的玩家index，默认选中第一名
         this.current_index.value = 0;
         (async () => {
-            const response = await fetch("https://snakeball-api.zhmlw.workers.dev/api/rank");
+            const response = await fetch("/api/rank");
             players_data.value = await response.json();
             // 为所有玩家添加排名参数
             players_data.value.forEach((data, index) => {
@@ -223,7 +223,7 @@ const rank = {
     // 获取玩家分数对应的排名
     get_rank() {
         let request = new XMLHttpRequest();
-        request.open("POST", "https://snakeball-api.zhmlw.workers.dev/api/rank", true);
+        request.open("POST", "/api/rank", true);
         request.setRequestHeader("Content-type", "application/json");
         request.send(JSON.stringify({
             name: player.name,
