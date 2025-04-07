@@ -10,9 +10,9 @@
             <div class="start_background_ball _middle_ball"></div>
         </div>
         <div class="start_inner">
-            <p class="start_usetip _font_2" @click="store.show_instrution">HOW TO PLAY?</p>
+            <p class="start_usetip _font_2" @click="store.show_instrution">如何游玩？</p>
             <div class="start_inputbox">
-                <input class="start_inputbox_input _font_4" type="text" placeholder="INPUT YOUR NAME" v-model="start.input_text.value" />
+                <input class="start_inputbox_input _font_4" type="text" placeholder="输入你的名字" v-model="start.input_text.value" />
                 <div class="start_inputbox_background">
                     <div class="start_inputbox_background_balls">
                         <div>
@@ -25,8 +25,8 @@
                 </div>
             </div>
             <p class="start_startbtn _font_1" @click="start.check_input">
-                — Click the
-                <span class="_font_1">Enter key</span> to start —
+                — 点击
+                <span class="_font_1">回车键</span> 开始 —
             </p>
             <div class="start_closebtn" @click="store.start_to_welcome">
                 <Closebtn />

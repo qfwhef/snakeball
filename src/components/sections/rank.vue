@@ -2,20 +2,20 @@
     <div class="rank _fullscreen" :class="{'_hidden':!rank.if_visible.value}">
         <div class="rank_middle _middle_ball">
             <div class="rank_middle_data">
-                <p class="_font_2">RANK</p>
-                <p class="_font_2">{{players_data.length?players_data[rank.current_index.value].rank:'loading'}}</p>
+                <p class="_font_2">排名</p>
+                <p class="_font_2">{{players_data.length?players_data[rank.current_index.value].rank:'加载中'}}</p>
             </div>
             <div class="rank_middle_data">
-                <p class="_font_2">SCORE</p>
-                <p class="_font_2">{{players_data.length?players_data[rank.current_index.value].score:'loading'}}</p>
+                <p class="_font_2">分数</p>
+                <p class="_font_2">{{players_data.length?players_data[rank.current_index.value].score:'加载中'}}</p>
             </div>
             <div class="rank_middle_data">
-                <p class="_font_2">LIVES</p>
-                <p class="_font_2">{{players_data.length?players_data[rank.current_index.value].lives:'loading'}}</p>
+                <p class="_font_2">生命</p>
+                <p class="_font_2">{{players_data.length?players_data[rank.current_index.value].lives:'加载中'}}</p>
             </div>
             <div class="rank_middle_data">
-                <p class="_font_2">WAVE</p>
-                <p class="_font_2">{{players_data.length?players_data[rank.current_index.value].wave:'loading'}}</p>
+                <p class="_font_2">波数</p>
+                <p class="_font_2">{{players_data.length?players_data[rank.current_index.value].wave:'加载中'}}</p>
             </div>
             <div class="rank_middle_closebtn" @click="rank.hidden">
                 <Closebtn />

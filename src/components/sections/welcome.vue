@@ -28,25 +28,25 @@
             <div class="welcome_nav_selection" style="--i:0">
                 <div class="wns_node" @click="store.welcome_to_start">
                     <div></div>
-                    <p class="_font_2">NEW GAME</p>
+                    <p class="_font_2">新游戏</p>
                 </div>
             </div>
             <div class="welcome_nav_selection" style="--i:1">
                 <div class="wns_node" @click="store.welcome_continue_game" :class="{'wns_unclickable':!player.if_active}">
                     <div></div>
-                    <p class="_font_2">CONTINUE</p>
+                    <p class="_font_2">继续游戏</p>
                 </div>
             </div>
             <div class="welcome_nav_selection" style="--i:2">
                 <div class="wns_node" @click="store.show_rank">
                     <div></div>
-                    <p class="_font_2">RANK</p>
+                    <p class="_font_2">排行榜</p>
                 </div>
             </div>
             <div class="welcome_nav_selection" style="--i:3">
                 <div class="wns_node" @click="store.show_instrution">
                     <div></div>
-                    <p class="_font_2">INSTRUTION</p>
+                    <p class="_font_2">游戏说明</p>
                 </div>
             </div>
         </div>

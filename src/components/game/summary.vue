@@ -19,15 +19,15 @@
         <div class="summary_inner">
             <div class="summary_inner_result">
                 <div class="summary_gray">
-                    <p class="_font_6">YOU</p>
+                    <p class="_font_6">你</p>
                 </div>
                 <div>
-                    <p class="_font_6">{{player.if_active?'LIVE!':'DEAD!'}}</p>
+                    <p class="_font_6">{{player.if_active?'存活!':'死亡!'}}</p>
                 </div>
             </div>
             <div class="summary_inner_score">
                 <div class="summary_gray">
-                    <p class="_font_4">SCORE</p>
+                    <p class="_font_4">分数</p>
                 </div>
                 <div>
                     <p class="_font_4">{{player.score}}</p>
@@ -35,13 +35,13 @@
             </div>
             <div class="summary_inner_selections">
                 <div @click="store.summary_continue_game">
-                    <p class="_font_4">{{player.if_active?'CONTINUE':'TRY AGAIN'}}</p>
+                    <p class="_font_4">{{player.if_active?'继续':'重试'}}</p>
                 </div>
                 <div @click="store.show_rank">
-                    <p class="_font_4">RANK</p>
+                    <p class="_font_4">排行榜</p>
                 </div>
                 <div @click="store.summary_to_welcome">
-                    <p class="_font_4">HOME</p>
+                    <p class="_font_4">主页</p>
                 </div>
             </div>
         </div>
