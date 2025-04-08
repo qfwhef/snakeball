@@ -60,7 +60,7 @@
     </a>
     <div class="menu" :class="{'menu_hide':menu_if_hide.value,'menu_showing':menu_if_showing.value}">
         <a href="https://jiejoe.com" target="_blank" class="menu_copyright">
-            <img src="@/assets/logo.png" />
+            <div class="menu_logo"></div>
             <br />MAKE BY JIEJOE
         </a>
         <div class="menu_box">
@@ -401,6 +401,13 @@ function openDbTest() {
 .menu_box_db {
     background-image: url("../../assets/icons/database.svg");
 }
+.menu_logo {
+    width: calc(var(--scale) * 5rem);
+    height: calc(var(--scale) * 5rem);
+    background-color: var(--color_front);
+    border-radius: 50%;
+    transition: transform 0.5s var(--ease_out);
+}
 .menu_copyright {
     display: flex;
     flex-direction: column;
@@ -416,15 +423,11 @@ function openDbTest() {
     transform: translateY(100%);
     transition: color 0.5s var(--ease_out);
 }
-.menu_copyright img {
-    width: calc(var(--scale) * 5rem);
-    transition: transform 0.5s var(--ease_out);
-}
 @media (hover: hover) {
     .menu_copyright:hover {
         color: var(--color_gray);
     }
-    .menu_copyright:hover img {
+    .menu_copyright:hover .menu_logo {
         transform: scale(1.2);
     }
 }

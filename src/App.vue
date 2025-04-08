@@ -7,7 +7,6 @@
     <Rank />
     <Menu />
     <Loading />
-    <Game />
     <DbTest ref="dbTest" />
 </template>
 <script setup>
@@ -16,7 +15,6 @@ import Welcome from "@/components/sections/welcome.vue";
 import Start from "@/components/sections/start.vue";
 import Instrution from "@/components/sections/instrution.vue";
 import Rank from "@/components/sections/rank.vue";
-import Game from "@/components/game/game.vue";
 import DbTest from "@/components/sections/dbtest.vue";
 // layout
 import Background from "@/components/layout/background.vue";
